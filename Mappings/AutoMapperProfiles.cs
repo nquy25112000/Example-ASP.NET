@@ -10,6 +10,9 @@ namespace Sample1.Mappings
         {
             CreateMap<Hotel, HotelDto>();
             CreateMap<HotelDto, Hotel>();
+
+            CreateMap<Room, RoomDto>();
+            CreateMap<RoomDto, Room>();
         }
     }
 }

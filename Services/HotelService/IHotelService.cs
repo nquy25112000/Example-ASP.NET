@@ -10,5 +10,6 @@ namespace Sample1.Services.HotelService
         Hotel Create(HotelDto hotelDto);
         Hotel Update(int id, HotelDto hotelDto);
         void Delete(int id);
+        Hotel findByName(string name);
     }
 }

@@ -1,60 +1,56 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Sample1.Data;
 using Sample1.Dto;
-using System.Xml.Linq;
+using Sample1.Repository;
 
 namespace Sample1.Services.HotelService
 {
 
     public class HotelService : IHotelService
     {
-        private readonly MyDbContext _db;
-
         private readonly IMapper _mapper;
-        public HotelService(MyDbContext db, IMapper mapper)
+
+        private readonly HotelRepository _repository;
+
+        public HotelService(IMapper mapper, HotelRepository repository)
         {
-            _db = db;
             _mapper = mapper;
-        }
-
-
-        public List<Hotel> GetAll()
-        {
-            return _db.HotelSet.ToList();
-        }
-
-        public Hotel GetById(int id)
-        {
-            return _db.HotelSet.SingleOrDefault(h => h.id == id);
+            _repository = repository;
         }
 
         public Hotel Create(HotelDto hotelDto)
         {
             Hotel hotel = _mapper.Map<Hotel>(hotelDto);
-            _db.HotelSet.Add(hotel);
-            _db.SaveChanges();
+            _repository.Create(hotel);
             return hotel;
-        }
-
-
-        public Hotel Update(int id, HotelDto hotelDto)
-        {
-            Hotel oldHotel = _db.HotelSet.SingleOrDefault(h => h.id == id);
-            if (oldHotel == null) return null;
-            _mapper.Map(hotelDto, oldHotel);
-            _db.SaveChanges();
-            return oldHotel;
-
         }
 
         public void Delete(int id)
         {
-            var oldHotel = _db.HotelSet.SingleOrDefault(h => h.id == id);
-            if (oldHotel == null) return;
-            _db.HotelSet.Remove(oldHotel);
-            _db.SaveChanges();
+            _repository.Delete(id);
+        }
+
+        public Hotel findByName(string name)
+        {
+            return _repository.findAllByName(name);
+        }
+
+        public List<Hotel> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+        public Hotel GetById(int id)
+        {
+            return _repository.GetById(id);
+        }
+
+        public Hotel Update(int id, HotelDto hotelDto)
+        {
+            Hotel oldHotel = this.GetById(id);
+            if (oldHotel == null) return null;
+            _mapper.Map(hotelDto, oldHotel);
+            return _repository.Update(oldHotel);
         }
     }
 }

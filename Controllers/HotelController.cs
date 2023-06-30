@@ -22,6 +22,7 @@ namespace Sample1.Controllers
         public List<Hotel> GetAll()
         {
             List<Hotel> hotels = _hotelService.GetAll();
+
             return hotels;
         }
 
@@ -37,7 +38,6 @@ namespace Sample1.Controllers
         {
             Hotel hotel = _hotelService.Create(hoteldto);
             return hotel;
-            throw new NotImplementedException();
         }
 
         [HttpPut("{id}", Name = "Update")]
@@ -45,7 +45,6 @@ namespace Sample1.Controllers
         {
             Hotel hotel = _hotelService.Update(id, hoteldto);
             return hotel;
-            throw new NotImplementedException();
         }
 
         [HttpDelete("{id}", Name = "Delete By Id")]
