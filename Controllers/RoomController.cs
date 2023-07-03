@@ -53,7 +53,7 @@ namespace Sample1.Controllers
         }
 
         [HttpPut("{id}")]
-        public Room Update(int id, RoomDto roomDto)
+        public Room Update(int id, [FromBody] RoomDto roomDto)
         {
             return service.Update(id, roomDto);
         }

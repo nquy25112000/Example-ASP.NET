@@ -10,8 +10,7 @@ namespace Sample1.Controllers
     public class HotelController : ControllerBase, IHotelController
     {
 
-        private IHotelService _hotelService;
-
+        private readonly IHotelService _hotelService;
 
         public HotelController(IHotelService hotelService)
         {
@@ -34,14 +33,14 @@ namespace Sample1.Controllers
         }
 
         [HttpPost(Name = "Create")]
-        public Hotel Create(HotelDto hoteldto)
+        public Hotel Create([FromBody] HotelDto hoteldto)
         {
             Hotel hotel = _hotelService.Create(hoteldto);
             return hotel;
         }
 
         [HttpPut("{id}", Name = "Update")]
-        public Hotel Update(int id, HotelDto hoteldto)
+        public Hotel Update(int id,[FromBody] HotelDto hoteldto)
         {
             Hotel hotel = _hotelService.Update(id, hoteldto);
             return hotel;

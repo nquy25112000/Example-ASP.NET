@@ -11,8 +11,8 @@ using Sample1.Data;
 namespace Sample1.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230630075623_AddTableBooRoom3")]
-    partial class AddTableBooRoom3
+    [Migration("20230703035945_AddTableBookRoom")]
+    partial class AddTableBookRoom
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,29 @@ namespace Sample1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Sample1.Data.BookRoom", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<int>("hotelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("roomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("hotelId");
+
+                    b.HasIndex("roomId");
+
+                    b.ToTable("bookroom");
+                });
 
             modelBuilder.Entity("Sample1.Data.Hotel", b =>
                 {
@@ -64,6 +87,25 @@ namespace Sample1.Migrations
                     b.HasIndex("hotelId");
 
                     b.ToTable("room");
+                });
+
+            modelBuilder.Entity("Sample1.Data.BookRoom", b =>
+                {
+                    b.HasOne("Sample1.Data.Hotel", "hotel")
+                        .WithMany()
+                        .HasForeignKey("hotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sample1.Data.Room", "room")
+                        .WithMany()
+                        .HasForeignKey("roomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("hotel");
+
+                    b.Navigation("room");
                 });
 
             modelBuilder.Entity("Sample1.Data.Room", b =>

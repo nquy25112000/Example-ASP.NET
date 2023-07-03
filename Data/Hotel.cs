@@ -12,6 +12,6 @@ namespace Sample1.Data
         [Required]
         public string name { get; set; }
 
-        public virtual IList<Room> rooms { get; set; }
+        public virtual List<Room> rooms { get; set; } = new List<Room>();
     }
 }

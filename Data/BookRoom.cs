@@ -13,9 +13,9 @@ namespace Sample1.Data
         public int hotelId { get; set; }
 
         [ForeignKey("hotelId")]
-        public Hotel hotel { get; set; }
+        public virtual Hotel hotel { get; set; }
 
         [ForeignKey("roomId")]
-        public Room room { get; set; }
+        public virtual Room room { get; set; }
     }
 }

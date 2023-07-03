@@ -1,16 +1,20 @@
 using AutoMapper;
+using HelloMiddleware;
 using Microsoft.EntityFrameworkCore;
 using Sample1.Data;
 using Sample1.Mappings;
 using Sample1.Repository;
 using Sample1.Services.HotelService;
+using Sample1.Services.RoleService;
 using Sample1.Services.RoomService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,14 +24,19 @@ options.UseSqlServer(
 builder.Configuration.GetConnectionString("MyDB")
 ));
 
+
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 
 builder.Services.AddScoped<HotelRepository>();
 builder.Services.AddScoped<RoomRepository>();
+builder.Services.AddScoped<RoleRepository>();
+
 
 
 var app = builder.Build();
@@ -40,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.HelloMiddleware();
 
 
 app.MapControllers();
