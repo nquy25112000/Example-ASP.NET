@@ -13,7 +13,7 @@ namespace Sample1.Repository
 
         public Hotel findAllByName(string name)
         {
-            return _db.Set<Hotel>().AsNoTracking().Where(hotel => hotel.name == name).First();
+            return _db.Set<Hotel>().Where(hotel => hotel.name == name).First();
         }
     }
 }

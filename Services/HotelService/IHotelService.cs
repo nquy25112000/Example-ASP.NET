@@ -13,3 +13,4 @@ namespace Sample1.Services.HotelService
         Hotel findByName(string name);
     }
 }
+ 

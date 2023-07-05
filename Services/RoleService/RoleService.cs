@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json.Linq;
 using Sample1.Data;
 using Sample1.Dto;
 using Sample1.Repository;
+using Sample1.Services.UserService;
+using System.Collections.Concurrent;
 
 namespace Sample1.Services.RoleService
 {
@@ -10,13 +13,16 @@ namespace Sample1.Services.RoleService
         private readonly IMapper mapper;
 
         private readonly RoleRepository repository;
-        public RoleService(IMapper mapper, RoleRepository repository)
+
+        private readonly IUserService userService;
+        public RoleService(IMapper mapper, RoleRepository repository, IUserService userService)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.userService = userService;
         }
 
-        public Role Create(RoleDto hotelDto)
+        public Roles Create(RoleDto hotelDto)
         {
             throw new NotImplementedException();
         }
@@ -26,22 +32,41 @@ namespace Sample1.Services.RoleService
             throw new NotImplementedException();
         }
 
-        public Role findByName(string name)
+        public Roles findByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public List<Role> GetAll()
+        public List<Roles> GetAll()
         {
-            throw new NotImplementedException();
+            List<Roles> roles = repository.GetAll();
+            List<Users> users = userService.GetAll();
+            ConcurrentDictionary<int, List<Users>> mapUser = new ConcurrentDictionary<int, List<Users>>();
+            users.ForEach(user =>
+            {
+                mapUser.AddOrUpdate(user.roleId, new List<Users> { user }, (key, list) =>
+                {
+                    list.Add(user);
+                    return list;
+                });
+            });
+            roles.ForEach(role =>
+            {
+                if (mapUser.TryGetValue(role.id, out List<Users> userList))
+                {
+                    role.users = userList;
+                }
+            });
+            return roles;
+            
         }
 
-        public Role GetById(int id)
+        public Roles GetById(int id)
         {
             return repository.GetById(id);
         }
 
-        public Role Update(int id, RoleDto hotelDto)
+        public Roles Update(int id, RoleDto hotelDto)
         {
             throw new NotImplementedException();
         }

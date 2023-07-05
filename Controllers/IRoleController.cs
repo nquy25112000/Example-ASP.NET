@@ -4,6 +4,6 @@ namespace Sample1.Controllers
 {
     public interface IRoleController
     {
-        Role GetById(int id);
+        Roles GetById(int id);
     }
 }

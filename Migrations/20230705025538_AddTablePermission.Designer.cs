@@ -11,8 +11,8 @@ using Sample1.Data;
 namespace Sample1.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230629064446_AddTableRoom")]
-    partial class AddTableRoom
+    [Migration("20230705025538_AddTablePermission")]
+    partial class AddTablePermission
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,6 +38,24 @@ namespace Sample1.Migrations
                     b.HasKey("id");
 
                     b.ToTable("hotel");
+                });
+
+            modelBuilder.Entity("Sample1.Data.Roles", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Sample1.Data.Room", b =>
@@ -66,6 +84,33 @@ namespace Sample1.Migrations
                     b.ToTable("room");
                 });
 
+            modelBuilder.Entity("Sample1.Data.Users", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("roleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("roleId");
+
+                    b.ToTable("Users", (string)null);
+                });
+
             modelBuilder.Entity("Sample1.Data.Room", b =>
                 {
                     b.HasOne("Sample1.Data.Hotel", "hotel")
@@ -77,9 +122,26 @@ namespace Sample1.Migrations
                     b.Navigation("hotel");
                 });
 
+            modelBuilder.Entity("Sample1.Data.Users", b =>
+                {
+                    b.HasOne("Sample1.Data.Roles", "role")
+                        .WithMany("users")
+                        .HasForeignKey("roleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("user_role_fk");
+
+                    b.Navigation("role");
+                });
+
             modelBuilder.Entity("Sample1.Data.Hotel", b =>
                 {
                     b.Navigation("rooms");
+                });
+
+            modelBuilder.Entity("Sample1.Data.Roles", b =>
+                {
+                    b.Navigation("users");
                 });
 #pragma warning restore 612, 618
         }

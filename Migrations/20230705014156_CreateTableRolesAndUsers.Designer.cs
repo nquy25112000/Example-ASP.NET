@@ -11,8 +11,8 @@ using Sample1.Data;
 namespace Sample1.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230703071519_DropColumnEmailInTableUser")]
-    partial class DropColumnEmailInTableUser
+    [Migration("20230705014156_CreateTableRolesAndUsers")]
+    partial class CreateTableRolesAndUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,29 +22,6 @@ namespace Sample1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Sample1.Data.BookRoom", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<int>("hotelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("roomId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("hotelId");
-
-                    b.HasIndex("roomId");
-
-                    b.ToTable("bookroom");
-                });
 
             modelBuilder.Entity("Sample1.Data.Hotel", b =>
                 {
@@ -63,7 +40,7 @@ namespace Sample1.Migrations
                     b.ToTable("hotel");
                 });
 
-            modelBuilder.Entity("Sample1.Data.Role", b =>
+            modelBuilder.Entity("Sample1.Data.Roles", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -78,7 +55,7 @@ namespace Sample1.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Role", (string)null);
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Sample1.Data.Room", b =>
@@ -107,17 +84,13 @@ namespace Sample1.Migrations
                     b.ToTable("room");
                 });
 
-            modelBuilder.Entity("Sample1.Data.User", b =>
+            modelBuilder.Entity("Sample1.Data.Users", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -135,26 +108,7 @@ namespace Sample1.Migrations
 
                     b.HasIndex("roleId");
 
-                    b.ToTable("User", (string)null);
-                });
-
-            modelBuilder.Entity("Sample1.Data.BookRoom", b =>
-                {
-                    b.HasOne("Sample1.Data.Hotel", "hotel")
-                        .WithMany()
-                        .HasForeignKey("hotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sample1.Data.Room", "room")
-                        .WithMany()
-                        .HasForeignKey("roomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("hotel");
-
-                    b.Navigation("room");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Sample1.Data.Room", b =>
@@ -168,9 +122,9 @@ namespace Sample1.Migrations
                     b.Navigation("hotel");
                 });
 
-            modelBuilder.Entity("Sample1.Data.User", b =>
+            modelBuilder.Entity("Sample1.Data.Users", b =>
                 {
-                    b.HasOne("Sample1.Data.Role", "role")
+                    b.HasOne("Sample1.Data.Roles", "role")
                         .WithMany("users")
                         .HasForeignKey("roleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -185,7 +139,7 @@ namespace Sample1.Migrations
                     b.Navigation("rooms");
                 });
 
-            modelBuilder.Entity("Sample1.Data.Role", b =>
+            modelBuilder.Entity("Sample1.Data.Roles", b =>
                 {
                     b.Navigation("users");
                 });

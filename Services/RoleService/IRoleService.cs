@@ -5,11 +5,11 @@ namespace Sample1.Services.RoleService
 {
     public interface IRoleService
     {
-        List<Role> GetAll();
-        Role GetById(int id);
-        Role Create(RoleDto hotelDto);
-        Role Update(int id, RoleDto hotelDto);
+        List<Roles> GetAll();
+        Roles GetById(int id);
+        Roles Create(RoleDto hotelDto);
+        Roles Update(int id, RoleDto hotelDto);
         void Delete(int id);
-        Role findByName(string name);
+        Roles findByName(string name);
     }
 }

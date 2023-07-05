@@ -11,10 +11,10 @@ namespace Sample1.Repository
         {
             _db = db;
         }
-
+            
         public E Create(E entity)
         {
-            _db.Set<E>().Add(entity);
+            _db.Add(entity);
             _db.SaveChanges();
             return entity;
         }

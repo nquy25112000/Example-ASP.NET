@@ -4,10 +4,23 @@
 
 namespace Sample1.Migrations
 {
-    public partial class AddTableRoom : Migration
+    public partial class InitDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "hotel",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_hotel", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "room",
                 columns: table => new
@@ -39,6 +52,9 @@ namespace Sample1.Migrations
         {
             migrationBuilder.DropTable(
                 name: "room");
+
+            migrationBuilder.DropTable(
+                name: "hotel");
         }
     }
 }
